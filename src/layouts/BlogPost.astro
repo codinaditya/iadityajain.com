@@ -1,86 +1,121 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
-
-type Props = CollectionEntry<'blog'>['data'];
-
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate } = Astro.props;
 ---
-
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
-
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} — Aditya Jain</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a08; --surface: #111110; --border: #2a2a26;
+      --accent: #c8f04a; --text: #e8e8e2; --muted: #6b6b65;
+      --serif: 'Playfair Display', serif;
+      --mono: 'DM Mono', monospace;
+      --sans: 'Instrument Sans', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); }
+    nav {
+      padding: 1.4rem 3rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo {
+      font-family: var(--serif); font-style: italic;
+      color: var(--text); text-decoration: none; font-size: 1.1rem;
+    }
+    .nav-back {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+      text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--accent); }
+    .post-hero {
+      max-width: 740px; margin: 0 auto;
+      padding: 6rem 2rem 3rem;
+    }
+    .post-meta {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 1.5rem;
+      display: flex; gap: 1.5rem; align-items: center;
+    }
+    .post-meta .cat {
+      color: var(--accent);
+      border: 1px solid rgba(200,240,74,0.3);
+      padding: 0.2rem 0.5rem;
+    }
+    h1 {
+      font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 900; line-height: 1.1; letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .post-desc {
+      color: var(--muted); font-size: 1.1rem; line-height: 1.7;
+      font-weight: 300; border-left: 2px solid var(--accent);
+      padding-left: 1.2rem;
+    }
+    .post-divider {
+      max-width: 740px; margin: 0 auto;
+      border: none; border-top: 1px solid var(--border); margin-bottom: 3rem;
+    }
+    .post-body {
+      max-width: 740px; margin: 0 auto;
+      padding: 0 2rem 8rem;
+      font-size: 1.05rem; line-height: 1.85; font-weight: 300; color: #c8c8c2;
+    }
+    .post-body h2 {
+      font-family: var(--serif); font-size: 1.8rem; font-weight: 700;
+      color: var(--text); margin: 3rem 0 1rem; line-height: 1.2;
+    }
+    .post-body h3 {
+      font-family: var(--serif); font-size: 1.3rem; font-weight: 700;
+      color: var(--text); margin: 2rem 0 0.75rem;
+    }
+    .post-body p { margin-bottom: 1.5rem; }
+    .post-body strong { color: var(--text); font-weight: 600; }
+    .post-body a { color: var(--accent); text-underline-offset: 3px; }
+    .post-body ul, .post-body ol {
+      padding-left: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .post-body li { margin-bottom: 0.5rem; }
+    .post-body blockquote {
+      border-left: 2px solid var(--accent);
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      margin: 2rem 0; color: var(--muted);
+      font-family: var(--serif); font-style: italic; font-size: 1.2rem;
+    }
+    .post-body code {
+      font-family: var(--mono); font-size: 0.85rem;
+      background: var(--surface); color: var(--accent);
+      padding: 0.15rem 0.4rem;
+    }
+    .post-body pre {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 1.5rem; overflow-x: auto; margin-bottom: 1.5rem;
+    }
+    .post-body pre code { background: none; padding: 0; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo">Aditya Jain</a>
+    <a href="/#blog" class="nav-back">← Back to Writing</a>
+  </nav>
+  <div class="post-hero">
+    <div class="post-meta">
+      <span class="cat">Essay</span>
+      <span>{new Date(pubDate).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}</span>
+    </div>
+    <h1>{title}</h1>
+    {description && <p class="post-desc">{description}</p>}
+  </div>
+  <hr class="post-divider" />
+  <article class="post-body">
+    <slot />
+  </article>
+</body>
 </html>
